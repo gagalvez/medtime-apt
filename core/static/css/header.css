@@ -1,0 +1,59 @@
+.nav-bar {
+    width:auto;
+    height: auto;
+    background-color: #2CCF9B;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+}
+
+.nav-links {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: white;
+}
+
+.nav-bar ul {
+    list-style: none;
+}
+
+.nav-btn {
+    background: #0091AD;
+    padding: 8px 16px;
+    border-radius: 16px;
+    transition: transform 200ms ease;
+}
+
+.nav-btn:hover {
+    transform: scale(1.05);
+}
+
+/* Background section */
+
+.bg-section {
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 100%;
+    width: 100%;
+}
+
+/* section prueba */
+
+.prueba {
+    position: relative;
+    transform-style: preserve-3d;
+    left: 0;
+    width: 100%;
+    background-color: white;
+    height: 840px;
+    z-index: -1;
+    padding: 20px;
+    box-sizing: border-box;
+}
