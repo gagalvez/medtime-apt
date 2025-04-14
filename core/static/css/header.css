@@ -1,13 +1,17 @@
+/* Nav principal */
 .nav-bar {
-    width:auto;
+    top: 0;
+    position: sticky;
+    width: 100%;
     height: auto;
     background-color: #2CCF9B;
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    justify-content: space-between;
     padding: 10px 20px;
 }
 
+/* nav derecho */
 .nav-links {
     display: flex;
     gap: 16px;
@@ -17,6 +21,7 @@
 .nav-links a {
     text-decoration: none;
     color: white;
+    font-weight: 500;
 }
 
 .nav-bar ul {
@@ -34,26 +39,49 @@
     transform: scale(1.05);
 }
 
-/* Background section */
-
-.bg-section {
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    height: 100%;
-    width: 100%;
-}
-
-/* section prueba */
-
-.prueba {
+.nav-links li a{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
     position: relative;
-    transform-style: preserve-3d;
-    left: 0;
-    width: 100%;
-    background-color: white;
-    height: 840px;
-    z-index: -1;
-    padding: 20px;
-    box-sizing: border-box;
 }
+
+.nav-links li a::before{
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 2px;
+    background-color: white;
+    transition: all .3s;
+}
+
+.nav-links li a:hover:before {
+    width: 100%;
+}
+
+/* Nav izquierdo */
+.nav-left a {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+}
+
+.nav-span {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: white;
+}
+
+.nav-icon {
+  width: 50px;
+  height: auto;
+  cursor: pointer;
+}
+
