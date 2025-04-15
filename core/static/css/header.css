@@ -33,11 +33,14 @@
     background: #0091AD;
     padding: 8px 16px;
     border-radius: 16px;
-    transition: transform 200ms ease;
+    border: 2px solid transparent;
+    transition: all 0.3s;
 }
 
 .nav-btn:hover {
-    transform: scale(1.05);
+    background: white;
+    color: #0091AD;
+    border: solid 2px #0091AD;
 }
 
 .nav-links li a{

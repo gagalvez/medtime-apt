@@ -24,7 +24,7 @@
 }
 
 .bg-text {
-  font-size: 2.5rem;
+  font-size: 3.5rem;
   font-weight: bold;
   margin-bottom: 2rem;
 }
@@ -41,9 +41,12 @@
     border-radius: 16px;
     transition: 400ms ease;
     margin-right: 12px;
+    border: 2px solid transparent;
+    transition: all 0.3s;
 }
 
 .hero-btn:hover {
   background: white;
   color: #0091AD;
+  border: solid 2px #0091AD;
 }
