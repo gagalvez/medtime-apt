@@ -3,6 +3,8 @@ from django.contrib import messages
 from .forms import CustomUserForm, LoginForm
 from django.contrib.auth import authenticate, login as auth_login
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth import update_session_auth_hash
 
 # Create your views here.
 
@@ -55,3 +57,20 @@ def registro(request):
 @login_required(login_url='login')
 def perfil(request):
     return render(request, 'perfil.html')
+
+@login_required
+def cambiar_contraseña(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(user=request.user, data=request.POST)
+        if form.is_valid():
+            form.save()
+            update_session_auth_hash(request, form.user)
+            messages.success(request, 'Tu contraseña ha sido cambiada con éxito.')
+            return redirect('perfil')
+        else:
+            messages.error(request, 'Por favor corrige los errores.')
+    else:
+        form = PasswordChangeForm(user=request.user)
+
+    return render(request, 'cambiar_contraseña.html', {'form': form})
+

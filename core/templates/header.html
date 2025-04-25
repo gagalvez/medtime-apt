@@ -2,30 +2,48 @@
 
 <header class="nav-bar">
   <div class="nav-left">
-    <a href="">
-      <img src="{% static 'img/icon.png' %}" alt="MedTime icon" class="nav-icon" />
+    <a href="" class="nav-left-cont">
+      <img
+        src="{% static 'img/icon.png' %}"
+        alt="MedTime icon"
+        class="nav-icon"
+      />
       <span class="nav-span">MedTime</span>
     </a>
+  </div>
+
+  {% comment %} Hamburguesa para mobile {% endcomment %}
+  <div class="hamburger" onclick="toggleMenu()">
+    <span class="bar"></span>
+    <span class="bar"></span>
+    <span class="bar"></span>
   </div>
 
   <ul class="nav-links">
     <li><a href="">Home</a></li>
 
     {% if user.is_authenticated %}
-      <li><a href="{% url 'perfil' %}">Perfil</a></li>
-      <li>
-        <form action="{% url 'logout' %}" method="post">
-          {% csrf_token %}
-          <button type="submit" class="logout-button">Cerrar sesión</button>
-        </form>
-      </li>
-    {% else %} 
-      <li><a href="{% url 'login' %}">Inicia sesión</a></li>
-      <li><a href="{% url 'registro' %}">Regístrate</a></li>
+    <li><a href="{% url 'perfil' %}">Perfil</a></li>
+    <li>
+      <form action="{% url 'logout' %}" method="post">
+        {% csrf_token %}
+        <button type="submit" class="logout-button">Cerrar sesión</button>
+      </form>
+    </li>
+    {% else %}
+    <li><a href="{% url 'login' %}">Inicia sesión</a></li>
+    <li><a href="{% url 'registro' %}">Regístrate</a></li>
     {% endif %}
-    
+
     <a href="" class="nav-btn">Agenda tu cita médica</a>
   </ul>
 </header>
+
+<script>
+  function toggleMenu() {
+    const menu = document.querySelector(".nav-links");
+    menu.classList.toggle("active");
+  }
+</script>
 
 <link rel="stylesheet" href="{% static 'css/header.css' %}" />

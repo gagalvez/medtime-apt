@@ -1,2 +1,15 @@
-  <h1>Bienvenido, {{ user.username }}!</h1>
-  <p>Este es tu perfil.</p>
+<h1>Bienvenido {{ user.username }}!</h1>
+<p>Aqui podrás gestionar tus citas medicas</p>
+
+<div class="btn-olvidar-cont">
+  <a href="{% url 'cambiar_contraseña' %}" class="btn-olvidar"
+    >Cambiar contraseña</a
+  >
+</div>
+
+{% if user.is_authenticated %}
+<form action="{% url 'logout' %}" method="post">
+  {% csrf_token %}
+  <button type="submit" class="logout-button">Cerrar sesión</button>
+</form>
+{% endif %}

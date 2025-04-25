@@ -102,13 +102,35 @@ body {
   font-size: 12px;
 }
 
+.btn-login:hover {
+  background-color:#2CCF9B;
+}
+
+.btn-volver:hover {
+  background-color:#2CCF9B;
+}
+
+.btn-volver {
+  width: fit-content;
+  background-color: #006b80;
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  font-weight: bold;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+  padding: 8px 32px;
+}
+
 .contenedor-botones {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-.btn-regis-cont {
+.btn-login-cont {
   display: flex;
   justify-content: center;
   width: 100%;
@@ -117,4 +139,18 @@ body {
 .btn-volver-cont {
   align-self: flex-start;
   margin-top: 32px;
+}  
+
+.btn-olvidar {
+  display: inline-block;
+  margin-top: 32px;
+  text-align: center;
+  font-size: 0.9rem;
+  color: white;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.btn-olvidar:hover {
+  color: #2CCF9B;
 }
