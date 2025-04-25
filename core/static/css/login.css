@@ -21,7 +21,7 @@ body {
   align-items: center;
 }
 
-.registro-container {
+.login-container {
   background-color: #0091ad;
   color: white;
   padding: 50px;
@@ -32,7 +32,7 @@ body {
   font-size: small;
 }
 
-.registro-container h2 {
+.login-container h2 {
   text-align: center;
   color: white;
 }
@@ -55,7 +55,7 @@ body {
   box-sizing: border-box;
 }
 
-.btn-registrar {
+.btn-login {
   width: fit-content;
   background-color: #006b80;
   color: white;
@@ -68,30 +68,38 @@ body {
   padding: 8px 32px;
 }
 
-.btn-registrar:hover {
-  background-color:#2CCF9B;
-}
-
-.btn-volver:hover {
-  background-color:#2CCF9B;
+.btn-login:hover {
+  background-color: #2CCF9B;
 }
 
 .background {
-    width: 50%;
+  width: 50%;
 }
 
-.btn-volver {
-  width: fit-content;
-  background-color: #006b80;
-  color: white;
+.messages {
+  margin-bottom: 20px;
+}
+
+.messages .alert {
   padding: 10px;
-  border: none;
   border-radius: 5px;
-  font-weight: bold;
-  cursor: pointer;
-  text-decoration: none;
-  transition: background-color 0.3s ease;
-  padding: 8px 32px;
+  margin-bottom: 10px;
+  color: white;
+}
+
+.alert-success {
+  background-color: #28a745;
+  color: white;
+}
+
+.alert-error {
+  background-color: #dc3545;
+  color: white;
+}
+
+.error {
+  color: #ff3333;
+  font-size: 12px;
 }
 
 .contenedor-botones {
@@ -109,5 +117,4 @@ body {
 .btn-volver-cont {
   align-self: flex-start;
   margin-top: 32px;
-}  
-
+}

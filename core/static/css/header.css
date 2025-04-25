@@ -13,6 +13,7 @@
 }
 
 /* nav derecho */
+
 .nav-links {
     display: flex;
     gap: 16px;
@@ -89,3 +90,33 @@
   cursor: pointer;
 }
 
+/* Estilo para el botón de cerrar sesión */
+.logout-button {
+    background: none;
+    border: none;
+    color: white;
+    font-weight: 500;
+    cursor: pointer;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    position: relative;
+    font-size: 1rem
+}
+
+.logout-button::before {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 2px;
+    background-color: white;
+    transition: all 0.3s;
+}
+
+.logout-button:hover::before {
+    width: 100%;
+}

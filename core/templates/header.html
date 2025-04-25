@@ -1,7 +1,7 @@
 {% load static %}
 
 <header class="nav-bar">
-  <div class="nav-left" >
+  <div class="nav-left">
     <a href="">
       <img src="{% static 'img/icon.png' %}" alt="MedTime icon" class="nav-icon" />
       <span class="nav-span">MedTime</span>
@@ -10,9 +10,21 @@
 
   <ul class="nav-links">
     <li><a href="">Home</a></li>
-    <li><a href="">Inicia sesion</a></li>
-    <li><a href="{% url 'registro' %}">Registrate</a></li>
-    <a href="" class="nav-btn">Agenda tu cita medica</a>
+
+    {% if user.is_authenticated %}
+      <li><a href="{% url 'perfil' %}">Perfil</a></li>
+      <li>
+        <form action="{% url 'logout' %}" method="post">
+          {% csrf_token %}
+          <button type="submit" class="logout-button">Cerrar sesión</button>
+        </form>
+      </li>
+    {% else %} 
+      <li><a href="{% url 'login' %}">Inicia sesión</a></li>
+      <li><a href="{% url 'registro' %}">Regístrate</a></li>
+    {% endif %}
+    
+    <a href="" class="nav-btn">Agenda tu cita médica</a>
   </ul>
 </header>
 
