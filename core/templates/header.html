@@ -32,10 +32,10 @@
     </li>
     {% else %}
     <li><a href="{% url 'login' %}">Inicia sesión</a></li>
-    <li><a href="{% url 'registro' %}">Regístrate</a></li>
+    <li><a href="{% url 'signup' %}">Regístrate</a></li>
     {% endif %}
 
-    <a href="" class="nav-btn">Agenda tu cita médica</a>
+    <a href="{% url 'agendar_cita' %}" class="nav-btn">Agenda tu cita médica</a>
   </ul>
 </header>
 

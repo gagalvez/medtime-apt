@@ -1,15 +1,18 @@
 {% load static %}
 
 <section class="hero" id="hero">
-  <img src="{% static 'img/background.png' %}" class="background">
+  <img src="{% static 'img/background.png' %}" class="background" />
   <div class="bg-content">
-    <h1 class="bg-text">Tu salud, nuestra prioridad: agenda médica confiable</h1>
+    <h1 class="bg-text">
+      Tu salud, nuestra prioridad: agenda médica confiable
+    </h1>
     <div class="botones">
       <a href="" class="hero-btn">Comienza</a>
-      <a href="{% url 'perfil' %}" class="hero-btn">Revisa el estado de tu cita</a>
+      <a href="{% url 'perfil' %}" class="hero-btn"
+        >Revisa el estado de tu cita</a
+      >
     </div>
   </div>
 </section>
-
 
 <link rel="stylesheet" href="{% static 'css/section_hero.css' %}" />

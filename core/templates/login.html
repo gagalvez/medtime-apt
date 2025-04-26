@@ -1,4 +1,4 @@
-{% load static %} {% load i18n %}
+{% load static %}
 
 <!DOCTYPE html>
 <html lang="es">
@@ -9,19 +9,17 @@
     <link rel="stylesheet" href="{% static 'css/login.css' %}" />
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
   </head>
+
   <body>
     <div class="left-half">
-      <img src="{% static 'img/login.jpg' %}" class="background" />
+      <img src="{% static 'img/appointment2.jpg' %}" class="background" />
     </div>
     <div class="right-half">
       <div class="login-container">
         <h2>Bienvenido! Por favor inicia sesión.</h2>
 
-        {% comment %} bloque de mensaje {% endcomment %}
-
         <form method="POST">
           {% csrf_token %}
-
           <div class="form-group">
             <label for="rut">RUT</label>
             <input type="text" id="rut" name="rut" required />
@@ -43,19 +41,17 @@
             <div class="alert alert-{{ message.tags }}">{{ message }}</div>
             {% endfor %}
           </div>
-          {% endif %}
-
-          {% if form.non_field_errors %}
-            <div class="alert alert-error">
-              {% for error in form.non_field_errors %}
-                <p>{{ error }}</p>
-              {% endfor %}
-            </div>
+          {% endif %} {% if form.non_field_errors %}
+          <div class="alert alert-error">
+            {% for error in form.non_field_errors %}
+            <p>{{ error }}</p>
+            {% endfor %}
+          </div>
           {% endif %}
 
           <div class="contenedor-botones">
-              <button type="submit" class="btn-login">Iniciar sesión</button>
-              <a href="{% url 'base' %}" class="btn-volver">Volver</a>
+            <button type="submit" class="btn-login">Iniciar sesión</button>
+            <a href="{% url 'base' %}" class="btn-volver">Volver</a>
           </div>
         </form>
       </div>

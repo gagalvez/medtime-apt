@@ -1,5 +1,4 @@
-<h1>Bienvenido {{ user.username }}!</h1>
-<p>Aqui podrás gestionar tus citas medicas</p>
+<h1>Bienvenido {{ user.nombre }} {{ user.apellido }}!</h1>
 
 <div class="btn-olvidar-cont">
   <a href="{% url 'cambiar_contraseña' %}" class="btn-olvidar"
@@ -7,13 +6,37 @@
   >
 </div>
 
+<body>
+    <header>
+        <h1>Aqui podrás gestionar tus citas medicas</h1>
+    </header>
+    <main>
+        <section>
+            <h2>Información del Paciente</h2>
+            <p><strong>Nombre:</strong> {{ cita.paciente.nombre }}</p>
+            <p><strong>Apellido:</strong> {{ cita.paciente.apellido }}</p>
+            <p><strong>RUT:</strong> {{ cita.paciente.rut }}</p>
+        </section>
+        <section>
+            <h2>Detalles de la Cita</h2>
+            <p><strong>Fecha:</strong> {{ cita.fecha }}</p>
+            <p><strong>Hora:</strong> {{ cita.hora }}</p>
+            <p><strong>Especialidad:</strong> {{ cita.especialidad }}</p>
+        </section>
+    </main>
+
+    
+    <a href="{% url 'base' %}" class="btn-volver">Volver</a>
+</body>
+
 {% if user.is_authenticated %}
 <form action="{% url 'logout' %}" method="post">
   {% csrf_token %}
   <button type="submit" class="logout-button">Cerrar sesión</button>
 </form>
 
-<form action="{% url 'enviar_correo' %}" method="get">
-  <button type="submit" class="btn-enviar-correo">Enviar correo</button>
+<form action="{% url 'reenviar_correo' %}" method="post">
+  {% csrf_token %}
+  <button type="submit">Reenviar cita medica al correo</button>
 </form>
 {% endif %}

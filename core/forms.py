@@ -7,7 +7,7 @@ class CustomUserForm(forms.ModelForm):
 
     class Meta:
         model = CustomUser
-        fields = ['rut', 'nombre', 'apellido', 'telefono', 'email', 'password']
+        fields = ['rut', 'nombre', 'apellido', 'email', 'password']
 
 
 class LoginForm(forms.Form):

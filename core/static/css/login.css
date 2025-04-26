@@ -8,27 +8,31 @@ body {
 
 .left-half {
   background-color: #0091ad;
-  width: 50%;
+  width: 70%;
   display: flex;
   justify-content: center;
   align-items: center;
+  position: relative;
+
 }
 
 .right-half {
   background-color: white;
-  width: 50%;
+  width: 70%;
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 20px;
+  z-index: 5;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2), 0 0 15px rgba(0, 0, 0, 0.1);
 }
 
 .login-container {
   background-color: #0091ad;
   color: white;
   padding: 50px;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2), 0 0 15px rgba(0, 0, 0, 0.1);
   width: 100%;
   max-width: 360px;
   font-size: small;
@@ -78,8 +82,8 @@ body {
 }
 
 .background {
-  width: 100%;
-  max-width: 500px;
+  width: 95%;
+  height: 50%;
 }
 
 .messages {

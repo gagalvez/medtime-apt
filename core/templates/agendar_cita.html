@@ -1,0 +1,24 @@
+{% load static %}
+
+<form method="POST">
+  {% csrf_token %}
+  <h2>Agendar Cita Médica</h2>
+
+  <label for="especialidad">Especialidad:</label>
+  <select name="especialidad" id="especialidad" required>
+    <option value="medicina_general">Medicina General</option>
+    <option value="odontologia">Odontología</option>
+    <option value="pediatria">Pediatría</option>
+    <option value="dermatologia">Dermatología</option>
+    <option value="ginecologia">Ginecología</option>
+    <option value="psicologia">Psicología</option>
+  </select>
+
+  <label for="fecha">Fecha:</label>
+  <input type="date" name="fecha" required />
+
+  <label for="hora">Hora:</label>
+  <input type="time" name="hora" required />
+
+  <button type="submit">Agendar</button>
+</form>

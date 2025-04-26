@@ -1,0 +1,71 @@
+{% load static %}
+
+<body>
+  <div class="left-half">
+    <img src="{% static 'img/register.jpg' %}" class="background" />
+  </div>
+  <div class="right-half">
+    <div class="registro-container">
+      <h2>Registro de Usuario</h2>
+      <form method="POST">
+        {% csrf_token %}
+        <div class="form-group">
+          <label for="rut"></label>
+          <input type="text" id="rut" name="rut" required placeholder="RUT" />
+        </div>
+        <div class="form-group">
+          <label for="nombre"></label>
+          <input
+            type="text"
+            id="nombre"
+            name="nombre"
+            required
+            placeholder="Nombre"
+          />
+        </div>
+        <div class="form-group">
+          <label for="apellido"></label>
+          <input
+            type="text"
+            id="apellido"
+            name="apellido"
+            required
+            placeholder="Apellido"
+          />
+        </div>
+        <div class="form-group">
+          <label for="email"></label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            required
+            placeholder="Correo electrónico"
+          />
+        </div>
+        <div class="form-group">
+          <label for="password"></label>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            required
+            placeholder="Contraseña"
+          />
+        </div>
+
+        <div class="contenedor-botones">
+          <div class="btn-regis-cont">
+            <button type="submit" class="btn-registrar">Registrarse</button>
+          </div>
+
+          <div class="btn-volver-cont">
+            <a href="{% url 'base' %}" class="btn-volver">Volver</a>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</body>
+
+<link rel="stylesheet" href="{% static 'css/signup.css' %}" />
