@@ -12,4 +12,8 @@
   {% csrf_token %}
   <button type="submit" class="logout-button">Cerrar sesión</button>
 </form>
+
+<form action="{% url 'enviar_correo' %}" method="get">
+  <button type="submit" class="btn-enviar-correo">Enviar correo</button>
+</form>
 {% endif %}

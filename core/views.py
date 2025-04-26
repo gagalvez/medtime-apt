@@ -5,6 +5,11 @@ from django.contrib.auth import authenticate, login as auth_login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
+from django.http import HttpResponse
+from django.core.mail import send_mail
+from django.conf import settings
+import requests
+
 
 # Create your views here.
 
@@ -14,25 +19,37 @@ def base(request):
 def login(request):
     if request.method == 'POST':
         form = LoginForm(request.POST)
+
+        # Valida CAPTCHA
+        recaptcha_response = request.POST.get('g-recaptcha-response')
+        data = {
+            'secret': settings.RECAPTCHA_SECRET_KEY,
+            'response': recaptcha_response
+        }
+        captcha_verification = requests.post('https://www.google.com/recaptcha/api/siteverify', data=data)
+        result = captcha_verification.json()
+
+        if not result.get('success'):
+            messages.error(request, "Por favor verifica que no eres un robot.")
+            return render(request, 'login.html', {'form': form})
+
         if form.is_valid():
             rut = form.cleaned_data['rut']
             password = form.cleaned_data['password']
-            
-            # Autentificar al usuario
+
             user = authenticate(request, username=rut, password=password)
             if user is not None:
                 auth_login(request, user)
                 messages.success(request, "¡Has iniciado sesión correctamente!")
-                print("Mensaje de éxito")
                 return redirect('base')
             else:
-                messages.error(request, "Usuario o contraseña incorrectos.")
-                print("Mensaje de error")
-                form.add_error(None, "Usuario o contraseña incorrectos.")
+                messages.error(request, "RUT o contraseña incorrectos.")
+                form.add_error(None, "RUT o contraseña incorrectos.")
     else:
         form = LoginForm()
 
     return render(request, 'login.html', {'form': form})
+
 
 def registro(request):
     if request.method == "POST":
@@ -74,3 +91,15 @@ def cambiar_contraseña(request):
 
     return render(request, 'cambiar_contraseña.html', {'form': form})
 
+
+def enviar_correo(request):
+    # Acá podemos definir el asunto, mensaje y destinatario del correo
+    subject = "Correo desde Django"
+    message = "Este es un correo de prueba enviado desde tu aplicación Django."
+    from_email = settings.DEFAULT_FROM_EMAIL  # Puede ser el mismo que EMAIL_HOST_USER
+    recipient_list = ['ga.galvez.v@gmail.com']  # Cambia al destinatario real
+
+    # Enviar el correo
+    send_mail(subject, message, from_email, recipient_list)
+
+    return HttpResponse("Correo enviado exitosamente.")

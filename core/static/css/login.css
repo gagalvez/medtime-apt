@@ -1,5 +1,6 @@
 body {
   display: flex;
+  flex-direction: row;
   height: 100vh;
   margin: 0;
   font-family: sans-serif;
@@ -19,17 +20,21 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+  padding: 20px;
 }
 
 .login-container {
   background-color: #0091ad;
   color: white;
   padding: 50px;
-  border-radius: 15px;
+  border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   width: 100%;
-  max-width: 350px;
+  max-width: 360px;
   font-size: small;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
 }
 
 .login-container h2 {
@@ -59,13 +64,13 @@ body {
   width: fit-content;
   background-color: #006b80;
   color: white;
-  padding: 10px;
   border: none;
   border-radius: 5px;
   font-weight: bold;
   cursor: pointer;
   transition: background-color 0.3s ease;
   padding: 8px 32px;
+  margin-top: 16px;
 }
 
 .btn-login:hover {
@@ -73,10 +78,12 @@ body {
 }
 
 .background {
-  width: 50%;
+  width: 100%;
+  max-width: 500px;
 }
 
 .messages {
+  margin-top: 20px;
   margin-bottom: 20px;
 }
 
@@ -84,7 +91,7 @@ body {
   padding: 10px;
   border-radius: 5px;
   margin-bottom: 10px;
-  color: white;
+  text-align: center;
 }
 
 .alert-success {
@@ -93,64 +100,85 @@ body {
 }
 
 .alert-error {
-  background-color: #dc3545;
+  margin-top: 12px;
+  background-color: rgba(255, 0, 0, 0.714);
   color: white;
+  padding: 10px;
+  border-radius: 5px;
+  text-align: center;
+  margin: 0;
 }
 
 .error {
-  color: #ff3333;
+  color: black;
   font-size: 12px;
 }
 
-.btn-login:hover {
-  background-color:#2CCF9B;
-}
-
-.btn-volver:hover {
-  background-color:#2CCF9B;
+.alert-error p {
+  margin: 0;
 }
 
 .btn-volver {
   width: fit-content;
   background-color: #006b80;
   color: white;
-  padding: 10px;
   border: none;
   border-radius: 5px;
   font-weight: bold;
   cursor: pointer;
-  text-decoration: none;
   transition: background-color 0.3s ease;
   padding: 8px 32px;
+  margin-top: 16px;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn-login:hover,
+.btn-volver:hover {
+  background-color: #2CCF9B;
 }
 
 .contenedor-botones {
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
   align-items: center;
+  margin-top:6px;
 }
 
-.btn-login-cont {
+.g-recaptcha {
   display: flex;
   justify-content: center;
-  width: 100%;
+  align-items: center;
+  margin: 32px 0;
 }
 
-.btn-volver-cont {
-  align-self: flex-start;
-  margin-top: 32px;
-}  
+/* Responsive */
+@media (max-width: 768px) {
+  body {
+    flex-direction: column;
+  }
 
-.btn-olvidar {
-  display: inline-block;
-  margin-top: 32px;
-  text-align: center;
-  font-size: 0.9rem;
-  color: white;
-  text-decoration: none;
-  transition: color 0.3s ease;
-}
+  .left-half,
+  .right-half {
+    width: 100%;
+  }
 
-.btn-olvidar:hover {
-  color: #2CCF9B;
+  .left-half {
+    display: none;
+  }
+
+  .login-container {
+    padding: 30px 20px;
+    margin-top: 40px;
+  }
+
+  .contenedor-botones {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .btn-volver, .btn-login {
+    width: fit-content;
+    text-align: center;
+  }
 }

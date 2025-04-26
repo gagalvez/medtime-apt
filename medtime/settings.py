@@ -136,3 +136,15 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGOUT_REDIRECT_URL = 'login' 
 
 LOGIN_URL = 'login'
+
+
+# Configuración de correo electrónico
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'medtime.notify@gmail.com' #contraseña gmail admin123$
+EMAIL_HOST_PASSWORD = 'kjbu tnei alnk phgw' #clave de app de google
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+RECAPTCHA_SECRET_KEY = '6LfZASUrAAAAAIP_EdsSCgMJQRIPgE9eFrkgZ2OI'
