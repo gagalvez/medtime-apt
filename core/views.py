@@ -1,20 +1,42 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from .forms import CustomUserForm, LoginForm
 from django.contrib.auth import authenticate, login as auth_login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import PasswordChangeForm
-from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth import update_session_auth_hash, get_user_model
 from django.http import HttpResponse
 from django.core.mail import send_mail
 from django.conf import settings
 import requests
-from .models import CitaMedica
+from .models import CitaMedica, CustomUser
 
 # Create your views here.
 
 def base(request):
     return render(request, "base.html")
+
+# Logica para el registro
+def signup(request):
+    if request.method == "POST":
+        form = CustomUserForm(request.POST)
+        if form.is_valid():
+            # Guarda el usuario en la base de datos
+            rut = form.cleaned_data['rut']
+            usuario = form.save(commit=False)
+            usuario.username = rut  # Asigna el RUT como username en la tabla default de django
+            usuario.set_password(form.cleaned_data['password'])  # Encripta la contraseña
+            usuario.save()
+
+            messages.success(request, "¡Te has registrado exitosamente!")
+            return redirect('base')
+        else:
+            messages.error(request, "Por favor corrige los errores en el formulario.")
+    else:
+        form = CustomUserForm()
+
+    return render(request, 'signup.html', {'form': form})
+
 
 # Logica para el login
 def login(request):
@@ -41,7 +63,7 @@ def login(request):
             user = authenticate(request, username=rut, password=password)
             if user is not None:
                 auth_login(request, user)
-                messages.success(request, "¡Has iniciado sesión correctamente!")
+                messages.success(request, "¡Has iniciado sesión correctamente!")  # Espera 1 segundo antes de redirigir
                 return redirect('base')
             else:
                 messages.error(request, "RUT o contraseña incorrectos.")
@@ -51,26 +73,6 @@ def login(request):
 
     return render(request, 'login.html', {'form': form})
 
-# Logica para el registro
-def signup(request):
-    if request.method == "POST":
-        form = CustomUserForm(request.POST)
-        if form.is_valid():
-            # Guarda el usuario en la base de datos
-            rut = form.cleaned_data['rut']
-            usuario = form.save(commit=False)
-            usuario.username = rut  # Asigna el RUT como username en la tabla default de django
-            usuario.set_password(form.cleaned_data['password'])  # Encripta la contraseña
-            usuario.save()
-
-            messages.success(request, "¡Te has registrado exitosamente!")
-            return redirect('base')
-        else:
-            messages.error(request, "Por favor corrige los errores en el formulario.")
-    else:
-        form = CustomUserForm()
-
-    return render(request, 'signup.html', {'form': form})
 
 # Logica para el perfil
 @login_required(login_url='login')
@@ -158,3 +160,16 @@ def agendar_cita(request):
 def cita_agendada(request, cita_id):
     cita = CitaMedica.objects.get(id=cita_id)
     return render(request, "cita_agendada.html", {'cita': cita})
+
+
+def cita_estado(request):
+    form = CustomUserForm()
+    citas = []
+
+    if request.method == "POST":
+        rut = request.POST.get('rut')
+        paciente = get_object_or_404(get_user_model(), rut=rut)  # Busca el usuario por RUT
+        # Filtra las citas médicas del paciente
+        citas = CitaMedica.objects.filter(paciente=paciente)
+
+    return render(request, "cita_estado.html", {"citas": citas, "form": form})

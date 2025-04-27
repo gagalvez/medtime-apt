@@ -1,14 +1,9 @@
-<h1>Bienvenido {{ user.nombre }} {{ user.apellido }}!</h1>
-
-<div class="btn-olvidar-cont">
-  <a href="{% url 'cambiar_contraseña' %}" class="btn-olvidar"
-    >Cambiar contraseña</a
-  >
-</div>
+{% load static %}
 
 <body>
     <header>
-        <h1>Aqui podrás gestionar tus citas medicas</h1>
+        <h1>Aquí podrás gestionar tus citas médicas</h1>
+        <h2>Bienvenido {{ user.nombre }} {{ user.apellido }}!</h2>
     </header>
     <main>
         <section>
@@ -16,6 +11,7 @@
             <p><strong>Nombre:</strong> {{ cita.paciente.nombre }}</p>
             <p><strong>Apellido:</strong> {{ cita.paciente.apellido }}</p>
             <p><strong>RUT:</strong> {{ cita.paciente.rut }}</p>
+            <p><strong>Email:</strong> {{ cita.paciente.email }}</p>
         </section>
         <section>
             <h2>Detalles de la Cita</h2>
@@ -25,18 +21,26 @@
         </section>
     </main>
 
+    <div class="btn-actions">
+        <div class="btn-olvidar-cont">
+            <a href="{% url 'cambiar_contraseña' %}" class="btn-olvidar">Cambiar contraseña</a>
+        </div>
+        <a href="{% url 'base' %}" class="btn-volver">Volver</a>
+    </div>
     
-    <a href="{% url 'base' %}" class="btn-volver">Volver</a>
+    {% if user.is_authenticated %}
+    <div class="btn-actions">
+        <form action="{% url 'reenviar_correo' %}" method="post">
+            {% csrf_token %}
+            <button type="submit" class="reenviar-btn">Reenviar cita médica al correo</button>
+        </form>
+
+        <form action="{% url 'logout' %}" method="post">
+            {% csrf_token %}
+            <button type="submit" class="logout-button">Cerrar sesión</button>
+        </form>
+    </div>
+    {% endif %}
 </body>
 
-{% if user.is_authenticated %}
-<form action="{% url 'logout' %}" method="post">
-  {% csrf_token %}
-  <button type="submit" class="logout-button">Cerrar sesión</button>
-</form>
-
-<form action="{% url 'reenviar_correo' %}" method="post">
-  {% csrf_token %}
-  <button type="submit">Reenviar cita medica al correo</button>
-</form>
-{% endif %}
+<link rel="stylesheet" href="{% static 'css/perfil.css' %}">

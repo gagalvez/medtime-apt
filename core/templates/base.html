@@ -15,6 +15,25 @@
     {% include 'section_proceso.html' %}
     {% include 'section_info.html' %}
     {% include 'footer.html' %}
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    {% if messages %}
+    <script>
+        {% for message in messages %}
+        Swal.fire({
+            title: '¡Éxito!',
+            text: '{{ message }}',
+            icon: 'success',
+            confirmButtonText: 'OK'
+        }).then((result) => {
+            if (result.isConfirmed) {
+            window.location.href = "{% url 'base' %}";
+            }
+        });
+        {% endfor %}
+    </script>
+    {% endif %}
 </body>
 
 </html>

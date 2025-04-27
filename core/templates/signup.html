@@ -5,67 +5,116 @@
     <img src="{% static 'img/register.jpg' %}" class="background" />
   </div>
   <div class="right-half">
-    <div class="registro-container">
+    <div class="login-container">
       <h2>Registro de Usuario</h2>
+
+      <!-- Mostrar los mensajes globales (de error o éxito) -->
+      {% if messages %}
+        <div class="messages">
+          {% for message in messages %}
+            <div class="alert {% if message == '¡Te has registrado exitosamente!' %}alert-success{% else %}alert-error{% endif %}">
+              <p>{{ message }}</p>
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+
       <form method="POST">
         {% csrf_token %}
+
         <div class="form-group">
-          <label for="rut"></label>
-          <input type="text" id="rut" name="rut" required placeholder="RUT" />
+          <input type="text" id="rut" name="rut" required placeholder="RUT" value="{{ form.rut.value|default:'' }}" />
+          {% if form.rut.errors %}
+            <div class="error">
+              <ul>
+                {% for error in form.rut.errors %}
+                  <li>{{ error }}</li>
+                {% endfor %}
+              </ul>
+            </div>
+          {% endif %}
         </div>
+
         <div class="form-group">
-          <label for="nombre"></label>
-          <input
-            type="text"
-            id="nombre"
-            name="nombre"
-            required
-            placeholder="Nombre"
-          />
+          <input type="text" id="nombre" name="nombre" required placeholder="Nombre" value="{{ form.nombre.value|default:'' }}" />
+          {% if form.nombre.errors %}
+            <div class="error">
+              <ul>
+                {% for error in form.nombre.errors %}
+                  <li>{{ error }}</li>
+                {% endfor %}
+              </ul>
+            </div>
+          {% endif %}
         </div>
+
         <div class="form-group">
-          <label for="apellido"></label>
-          <input
-            type="text"
-            id="apellido"
-            name="apellido"
-            required
-            placeholder="Apellido"
-          />
+          <input type="text" id="apellido" name="apellido" required placeholder="Apellido" value="{{ form.apellido.value|default:'' }}" />
+          {% if form.apellido.errors %}
+            <div class="error">
+              <ul>
+                {% for error in form.apellido.errors %}
+                  <li>{{ error }}</li>
+                {% endfor %}
+              </ul>
+            </div>
+          {% endif %}
         </div>
+
         <div class="form-group">
-          <label for="email"></label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            required
-            placeholder="Correo electrónico"
-          />
+          <input type="email" id="email" name="email" required placeholder="Correo electrónico" value="{{ form.email.value|default:'' }}" />
+          {% if form.email.errors %}
+            <div class="error">
+              <ul>
+                {% for error in form.email.errors %}
+                  <li>{{ error }}</li>
+                {% endfor %}
+              </ul>
+            </div>
+          {% endif %}
         </div>
+
         <div class="form-group">
-          <label for="password"></label>
-          <input
-            type="password"
-            id="password"
-            name="password"
-            required
-            placeholder="Contraseña"
-          />
+          <input type="password" id="password" name="password" required placeholder="Contraseña" />
+          {% if form.password.errors %}
+            <div class="error">
+              <ul>
+                {% for error in form.password.errors %}
+                  <li>{{ error }}</li>
+                {% endfor %}
+              </ul>
+            </div>
+          {% endif %}
         </div>
 
         <div class="contenedor-botones">
-          <div class="btn-regis-cont">
-            <button type="submit" class="btn-registrar">Registrarse</button>
-          </div>
-
-          <div class="btn-volver-cont">
-            <a href="{% url 'base' %}" class="btn-volver">Volver</a>
-          </div>
+          <button type="submit" class="btn-login">Registrarse</button>
+          <a href="{% url 'base' %}" class="btn-volver">Volver</a>
         </div>
       </form>
     </div>
   </div>
+
+  {% comment %} Script para enviar mensaje de éxito al registrar {% endcomment %}
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  {% if messages %}
+    <script>
+      {% for message in messages %}
+        if ("{{ message }}" === "¡Te has registrado exitosamente!") {
+          Swal.fire({
+            title: '¡Registro exitoso!',
+            text: '{{ message }}',
+            icon: 'success',
+            confirmButtonText: 'OK'
+          }).then((result) => {
+            if (result.isConfirmed) {
+              window.location.href = "{% url 'base' %}";
+            }
+          });
+        }
+      {% endfor %}
+    </script>
+  {% endif %}
 </body>
 
 <link rel="stylesheet" href="{% static 'css/signup.css' %}" />

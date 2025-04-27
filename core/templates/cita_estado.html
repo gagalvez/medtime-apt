@@ -1,0 +1,53 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estado de tu Cita Médica</title>
+    <link rel="stylesheet" href="{% static 'css/cita_estado.css' %}">
+</head>
+<body>
+    <header>
+        <h1>Revisa el estado de tu cita médica</h1>
+    </header>
+    <main>
+        <section class="form-container">
+            <h2>Introduce tu RUT para ver tu cita</h2>
+            <form method="post" action="{% url 'cita_estado' %}">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="rut">RUT:</label>
+                    <input type="text" name="rut" id="rut" required placeholder="Ej: 12.345.678-9" value="{{ request.POST.rut }}">
+                    {% if form.rut.errors %}
+                        <div class="error">{{ form.rut.errors }}</div>
+                    {% endif %}
+                </div>
+                <button type="submit" class="btn-revisar">Revisar</button>
+            </form>
+        </section>
+
+        {% if citas %}
+        <section class="cita-info">
+            <h2>Información de tus citas</h2>
+            {% for cita in citas %}
+            <p><strong>Nombre:</strong> {{ cita.paciente.nombre }} {{ cita.paciente.apellido }}</p>
+            <p><strong>Fecha:</strong> {{ cita.fecha }}</p>
+            <p><strong>Hora:</strong> {{ cita.hora }}</p>
+            <p><strong>Especialidad:</strong> {{ cita.especialidad }}</p>
+            <hr>
+            {% empty %}
+            <p>No se encontraron citas para este RUT.</p>
+            {% endfor %}
+        </section>
+        {% else %}
+        <p>No hay citas disponibles para el RUT ingresado.</p>
+        {% endif %}
+    </main>
+
+    <footer>
+        <a href="{% url 'base' %}" class="btn-volver">Volver</a>
+    </footer>
+</body>
+</html>

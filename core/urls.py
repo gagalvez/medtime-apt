@@ -13,4 +13,5 @@ urlpatterns = [
     path('agendar-cita/', views.agendar_cita, name='agendar_cita'),
     path('cita-agendada/<int:cita_id>/', views.cita_agendada, name='cita_agendada'),
     path('reenviar-correo/', views.reenviar_correo, name='reenviar_correo'),
+    path('cita_estado/', views.cita_estado, name='cita_estado'),
 ]
