@@ -16,24 +16,33 @@ class CustomUserForm(forms.ModelForm):
         fields = ['rut', 'nombre', 'apellido', 'email', 'password']
 
     # Validación para el RUT
-    def clean_rut(self):
-        rut = self.cleaned_data.get('rut')
+def clean_rut(self):
+    rut = self.cleaned_data.get('rut')
 
-        # Eliminar puntos y guion para el RUT
-        rut_normalizado = rut.replace('.', '').replace('-', '')
+    if not rut:
+        raise forms.ValidationError('Debes ingresar un RUT.')
 
-        # Validar el formato (sin puntos ni guion)
-        pattern = r'^\d{7,8}[0-9kK]$'  # 7 u 8 dígitos + dígito verificador
-        if not re.match(pattern, rut_normalizado):
-            raise forms.ValidationError('El RUT debe tener 7 u 8 dígitos seguidos por un dígito verificador.')
+    # Eliminar puntos y guion
+    rut_normalizado = rut.replace('.', '').replace('-', '').upper()
 
-        if CustomUser.objects.filter(rut=rut_normalizado).exists():
-            raise forms.ValidationError('El RUT ya está registrado.')
+    # Validar formato: 7 u 8 dígitos + 1 dígito verificador (k o número)
+    pattern = r'^\d{7,8}[0-9K]$'
+    if not re.match(pattern, rut_normalizado):
+        raise forms.ValidationError('El RUT debe tener 7 u 8 dígitos seguidos de un dígito verificador.')
 
-        # Aplica formato 00.000.000-0
-        rut_formateado = f"{rut_normalizado[:2]}.{rut_normalizado[2:5]}.{rut_normalizado[5:8]}-{rut_normalizado[8].upper()}"
+    if CustomUser.objects.filter(rut=rut_normalizado).exists():
+        raise forms.ValidationError('El RUT ya está registrado.')
 
-        return rut_formateado
+    # formato dependiendo de si es 8 o 9 caracteres
+    cuerpo = rut_normalizado[:-1]
+    dv = rut_normalizado[-1]
+
+    if len(cuerpo) == 7:
+        rut_formateado = f"{cuerpo[:1]}.{cuerpo[1:4]}.{cuerpo[4:7]}-{dv}"
+    else:
+        rut_formateado = f"{cuerpo[:2]}.{cuerpo[2:5]}.{cuerpo[5:8]}-{dv}"
+
+    return rut_formateado
 
     # Capitaliza la primera letra del nombre
     def clean_nombre(self):
