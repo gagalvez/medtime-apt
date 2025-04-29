@@ -44,25 +44,25 @@ def clean_rut(self):
 
     return rut_formateado
 
-    # Capitaliza la primera letra del nombre
-    def clean_nombre(self):
+# Capitaliza la primera letra del nombre
+def clean_nombre(self):
         nombre = self.cleaned_data.get('nombre')
         return nombre.capitalize()
 
-    # Capitaliza la primera letra del apellido
-    def clean_apellido(self):
+# Capitaliza la primera letra del apellido
+def clean_apellido(self):
         apellido = self.cleaned_data.get('apellido')
         return apellido.capitalize()
 
-    # Validación para la contraseña, minimo 5 caracteres
-    def clean_password(self):
+# Validación para la contraseña, minimo 5 caracteres
+def clean_password(self):
         password = self.cleaned_data.get('password')
         if len(password) < 5:
             raise forms.ValidationError('La contraseña debe tener al menos 5 caracteres.')
         return password
 
-    # Validación para el email
-    def clean_email(self):
+# Validación para el email
+def clean_email(self):
         email = self.cleaned_data.get('email')
         if CustomUser.objects.filter(email=email).exists():
             raise forms.ValidationError('Este correo electrónico ya está registrado.')

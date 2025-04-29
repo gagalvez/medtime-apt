@@ -5,11 +5,12 @@ from django.contrib.auth import authenticate, login as auth_login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash, get_user_model
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.core.mail import send_mail
 from django.conf import settings
 import requests
 from .models import CitaMedica, CustomUser
+from django.contrib.auth import authenticate, login
 
 # Create your views here.
 
@@ -21,14 +22,19 @@ def signup(request):
     if request.method == "POST":
         form = CustomUserForm(request.POST)
         if form.is_valid():
-            # Guarda el usuario en la base de datos
             rut = form.cleaned_data['rut']
+            password = form.cleaned_data['password']
             usuario = form.save(commit=False)
-            usuario.username = rut  # Asigna el RUT como username en la tabla default de django
-            usuario.set_password(form.cleaned_data['password'])  # Encripta la contraseña
+            usuario.username = rut  # Asigna el RUT como username
+            usuario.set_password(password)
             usuario.save()
 
-            messages.success(request, "¡Te has registrado exitosamente!")
+            # Luego de registrar, logea al usuario
+            user = authenticate(request, rut=rut, password=password)
+            if user is not None:
+                login(request, user)
+
+            messages.success(request, "¡Te has registrado e iniciado sesión exitosamente!")
             return redirect('base')
         else:
             messages.error(request, "Por favor corrige los errores en el formulario.")
@@ -39,7 +45,7 @@ def signup(request):
 
 
 # Logica para el login
-def login(request):
+def login_view(request):
     if request.method == 'POST':
         form = LoginForm(request.POST)
 
@@ -63,7 +69,7 @@ def login(request):
             user = authenticate(request, username=rut, password=password)
             if user is not None:
                 auth_login(request, user)
-                messages.success(request, "¡Has iniciado sesión correctamente!")  # Espera 1 segundo antes de redirigir
+                messages.success(request, "¡Has iniciado sesión correctamente!")
                 return redirect('base')
             else:
                 messages.error(request, "RUT o contraseña incorrectos.")
@@ -173,3 +179,19 @@ def cita_estado(request):
         citas = CitaMedica.objects.filter(paciente=paciente)
 
     return render(request, "cita_estado.html", {"citas": citas, "form": form})
+
+# Vista para mostrar las citas del doctor
+@login_required
+def mis_citas(request):
+    if request.user.is_doctor:
+        citas = CitaMedica.objects.filter(doctor=request.user)
+    else:
+        citas = []
+
+    return render(request, 'mis_citas.html', {'citas': citas})
+
+def obtener_doctores(request):
+    especialidad = request.GET.get('especialidad')
+    doctores = CustomUser.objects.filter(rol='doctor', especialidad=especialidad).values('id', 'nombre')
+
+    return JsonResponse(list(doctores), safe=False)

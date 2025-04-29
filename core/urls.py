@@ -5,7 +5,7 @@ from django.contrib.auth import views as auth_views
 urlpatterns = [
     path("", views.base, name="base"),
     path("signup/", views.signup, name="signup" ),
-    path('login/', views.login, name='login'),
+    path('login/', views.login_view, name='login'),
     path('logout/', auth_views.LogoutView.as_view(next_page='base'), name='logout'),
     path('perfil/', views.perfil, name='perfil'),
     path("cambiar-contraseña/", views.cambiar_contraseña, name="cambiar_contraseña"),
@@ -14,4 +14,5 @@ urlpatterns = [
     path('cita-agendada/<int:cita_id>/', views.cita_agendada, name='cita_agendada'),
     path('reenviar-correo/', views.reenviar_correo, name='reenviar_correo'),
     path('cita_estado/', views.cita_estado, name='cita_estado'),
+    path('doctores/', views.obtener_doctores, name='obtener_doctores'),
 ]
