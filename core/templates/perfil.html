@@ -1,6 +1,7 @@
 {% load static %}
 
-<body>
+{% if user.is_paciente %}
+    <!-- Este contenido es visible solo para pacientes -->
     <header>
         <h1>Aquí podrás gestionar tus citas médicas</h1>
         <h2>Bienvenido {{ user.nombre }} {{ user.apellido }}!</h2>
@@ -18,6 +19,7 @@
             <p><strong>Fecha:</strong> {{ cita.fecha }}</p>
             <p><strong>Hora:</strong> {{ cita.hora }}</p>
             <p><strong>Especialidad:</strong> {{ cita.especialidad }}</p>
+            <p><strong>Doctor:</strong> {{ cita.doctor.nombre }} {{ cita.doctor.apellido }}</p>
         </section>
     </main>
 
@@ -41,6 +43,9 @@
         </form>
     </div>
     {% endif %}
-</body>
+{% else %}
+    <p>Acceso no permitido. Solo los pacientes pueden ver esta página.</p>
+{% endif %}
+
 
 <link rel="stylesheet" href="{% static 'css/perfil.css' %}">

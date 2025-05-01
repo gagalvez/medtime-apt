@@ -32,10 +32,18 @@
         <section class="cita-info">
             <h2>Información de tus citas</h2>
             {% for cita in citas %}
-            <p><strong>Nombre:</strong> {{ cita.paciente.nombre }} {{ cita.paciente.apellido }}</p>
+            <p><strong>Nombre del Paciente:</strong> {{ cita.paciente.nombre }} {{ cita.paciente.apellido }}</p>
             <p><strong>Fecha:</strong> {{ cita.fecha }}</p>
             <p><strong>Hora:</strong> {{ cita.hora }}</p>
             <p><strong>Especialidad:</strong> {{ cita.especialidad }}</p>
+            <p><strong>Doctor:</strong> {{ cita.doctor.nombre }} {{ cita.doctor.apellido }}</p> <!-- Nombre del Doctor -->
+            
+            <!-- Botón para eliminar cita -->
+            <form method="POST" action="{% url 'eliminar_cita' cita.id %}">
+                {% csrf_token %}
+                <button type="submit" class="btn-eliminar">Eliminar Cita</button>
+            </form>
+
             <hr>
             {% empty %}
             <p>No se encontraron citas para este RUT.</p>
@@ -45,6 +53,25 @@
         <p>No hay citas disponibles para el RUT ingresado.</p>
         {% endif %}
     </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+{% if messages %}
+    <script>
+        {% for message in messages %}
+            Swal.fire({
+                title: '¡Éxito!',
+                text: '{{ message }}',
+                icon: 'success',
+                confirmButtonText: 'OK'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = "{% url 'cita_estado' %}";  // Redirige a la página de estado de cita
+                }
+            });
+        {% endfor %}
+    </script>
+{% endif %}
 
     <footer>
         <a href="{% url 'base' %}" class="btn-volver">Volver</a>

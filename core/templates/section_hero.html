@@ -7,10 +7,12 @@
       Tu salud, nuestra prioridad: agenda médica confiable
     </h1>
     <div class="botones">
-      <a href="{% url 'login' %}" class="hero-btn">Comienza</a>
-      <a href="{% url 'cita_estado' %}" class="hero-btn"
-        >Revisa el estado de tu cita</a
-      >
+      {% if user.is_authenticated %}
+        <a href="{% url 'agendar_cita' %}" class="hero-btn">Agenda tu cita médica aquí</a>
+      {% else %}
+        <a href="{% url 'login' %}" class="hero-btn">Comienza</a>
+      {% endif %}
+      <a href="{% url 'cita_estado' %}" class="hero-btn">Revisa el estado de tu cita</a>
     </div>
   </div>
 </section>

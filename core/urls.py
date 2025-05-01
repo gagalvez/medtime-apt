@@ -15,4 +15,6 @@ urlpatterns = [
     path('reenviar-correo/', views.reenviar_correo, name='reenviar_correo'),
     path('cita_estado/', views.cita_estado, name='cita_estado'),
     path('doctores/', views.obtener_doctores, name='obtener_doctores'),
+    path('eliminar_cita/<int:cita_id>/', views.eliminar_cita, name='eliminar_cita'),
+    path('panel_doctor/', views.panel_doctor, name='panel_doctor'),
 ]

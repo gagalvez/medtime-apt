@@ -70,7 +70,12 @@ def login_view(request):
             if user is not None:
                 auth_login(request, user)
                 messages.success(request, "¡Has iniciado sesión correctamente!")
-                return redirect('base')
+
+                # Verifica si el usuario es doctor y redirige a "Mis citas médicas"
+                if user.is_doctor:
+                    return redirect('panel_doctor')  # Redirige a la página de citas médicas para doctores
+                else:
+                    return redirect('base')  # Redirige a la página principal para pacientes
             else:
                 messages.error(request, "RUT o contraseña incorrectos.")
                 form.add_error(None, "RUT o contraseña incorrectos.")
@@ -142,13 +147,18 @@ def reenviar_correo(request):
 def agendar_cita(request):
     if request.method == "POST":
         especialidad = request.POST.get("especialidad")
+        doctor_id = request.POST.get("doctor")  # El ID del doctor seleccionado
         fecha = request.POST.get("fecha")
         hora = request.POST.get("hora")
+
+        # Obtener el doctor seleccionado
+        doctor = get_object_or_404(CustomUser, id=doctor_id)
 
         # Guarda la cita en la base de datos
         cita = CitaMedica(
             paciente=request.user,
             especialidad=especialidad,
+            doctor=doctor,  # Asigna el doctor seleccionado
             fecha=fecha,
             hora=hora
         )
@@ -158,16 +168,21 @@ def agendar_cita(request):
 
         # Redirigir a la página de cita agendada, pasando el cita_id
         return redirect('cita_agendada', cita_id=cita.id)
-    
+
     return render(request, "agendar_cita.html")
+
 
 # Logica para mostrar la cita agendada
 @login_required
 def cita_agendada(request, cita_id):
-    cita = CitaMedica.objects.get(id=cita_id)
+    try:
+        cita = CitaMedica.objects.get(id=cita_id)
+    except CitaMedica.DoesNotExist:
+        messages.error(request, "La cita no se encontró.")
+        return redirect('perfil')
     return render(request, "cita_agendada.html", {'cita': cita})
 
-
+# No es neceario el login para ver el estado de la cita
 def cita_estado(request):
     form = CustomUserForm()
     citas = []
@@ -182,16 +197,34 @@ def cita_estado(request):
 
 # Vista para mostrar las citas del doctor
 @login_required
-def mis_citas(request):
+def panel_doctor(request):
+    # Verifica si el usuario es un doctor
     if request.user.is_doctor:
+        # Obtiene las citas agendadas para el doctor logueado
         citas = CitaMedica.objects.filter(doctor=request.user)
-    else:
-        citas = []
 
-    return render(request, 'mis_citas.html', {'citas': citas})
+        return render(request, 'panel_doctor.html', {
+            'user': request.user,
+            'citas': citas,
+        })
+    else:
+        return render(request, 'panel_doctor.html', {
+            'error_message': 'Acceso no permitido. Solo los doctores pueden ver esta página.',
+        })
 
 def obtener_doctores(request):
     especialidad = request.GET.get('especialidad')
     doctores = CustomUser.objects.filter(rol='doctor', especialidad=especialidad).values('id', 'nombre')
 
     return JsonResponse(list(doctores), safe=False)
+
+# Vista para eliminar una cita médica
+def eliminar_cita(request, cita_id):
+    try:
+        cita = CitaMedica.objects.get(id=cita_id)
+        cita.delete()  # Elimina la cita
+        messages.success(request, 'Cita eliminada con éxito.')
+    except CitaMedica.DoesNotExist:
+        messages.error(request, 'La cita no existe.')
+    
+    return redirect('cita_estado')  # Redirige de vuelta a la vista de estado de la cita

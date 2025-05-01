@@ -15,19 +15,29 @@
     <main>
         <section>
             <h2>Información del Paciente</h2>
-            <p><strong>Nombre:</strong> {{ cita.paciente.nombre }}</p>
-            <p><strong>Apellido:</strong> {{ cita.paciente.apellido }}</p>
-            <p><strong>RUT:</strong> {{ cita.paciente.rut }}</p>
+            {% if cita.paciente %}
+                <p><strong>Nombre:</strong> {{ cita.paciente.nombre }}</p>
+                <p><strong>Apellido:</strong> {{ cita.paciente.apellido }}</p>
+                <p><strong>RUT:</strong> {{ cita.paciente.rut }}</p>
+            {% else %}
+                <p>No se encontró información del paciente.</p>
+            {% endif %}
         </section>
+
         <section>
             <h2>Detalles de la Cita</h2>
             <p><strong>Fecha:</strong> {{ cita.fecha }}</p>
             <p><strong>Hora:</strong> {{ cita.hora }}</p>
-            <p><strong>Especialidad:</strong> {{ cita.especialidad }}</p>
+            <p><strong>Especialidad:</strong> {{ cita.get_especialidad_display }}</p> <!-- Aquí se usa el método get_especialidad_display -->
+            
+            {% if cita.doctor %}
+                <p><strong>Doctor:</strong> {{ cita.doctor.nombre }} {{ cita.doctor.apellido }}</p> <!-- Aquí se muestra el doctor -->
+            {% else %}
+                <p>No se encontró información del doctor.</p>
+            {% endif %}
         </section>
     </main>
 
-    
     <a href="{% url 'base' %}" class="btn-volver">Volver</a>
 </body>
 </html>

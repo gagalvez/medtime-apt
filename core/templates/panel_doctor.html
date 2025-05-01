@@ -1,0 +1,79 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Panel de Administración - MedTime</title>
+  <link rel="stylesheet" href="{% static 'css/panel_doctor.css' %}" />
+</head>
+
+<body>
+  {% if user.is_doctor %}
+    <div class="panel-container">
+      <header class="header">
+        <h1>Panel de Administración para Citas Médicas - MedTime</h1>
+        <div class="doctor-info">
+          <h2>Bienvenido, Dr. {{ user.nombre }} {{ user.apellido }}</h2>
+          <p><strong>Especialidad:</strong> {{ user.get_especialidad_display }}</p>
+          <p><strong>RUT:</strong> {{ user.rut }}</p>
+          <p><strong>Email:</strong> {{ user.email }}</p>
+        </div>
+      </header>
+
+      <section class="appointments-section">
+        <h2>Citas Médicas Agendadas</h2>
+        {% if citas %}
+          <table class="appointments-table">
+            <thead>
+              <tr>
+                <th>Paciente</th>
+                <th>Fecha</th>
+                <th>Hora</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for cita in citas %}
+                <tr>
+                  <td>{{ cita.paciente.nombre }} {{ cita.paciente.apellido }}</td>
+                  <td>{{ cita.fecha }}</td>
+                  <td>{{ cita.hora }}</td>
+                </tr>
+              {% empty %}
+                <tr>
+                  <td colspan="3">No hay citas agendadas.</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        {% else %}
+          <p>No tienes citas agendadas.</p>
+        {% endif %}
+      </section>
+
+      <div class="btn-actions">
+        <div class="btn-olvidar-cont">
+          <a href="{% url 'cambiar_contraseña' %}" class="btn-olvidar">Cambiar contraseña</a>
+        </div>
+      </div>
+
+      {% if user.is_authenticated %}
+        <div class="btn-actions">
+          <form action="{% url 'reenviar_correo' %}" method="post">
+            {% csrf_token %}
+            <button type="submit" class="reenviar-btn">Reenviar cita médica al correo</button>
+          </form>
+
+          <form action="{% url 'logout' %}" method="post">
+            {% csrf_token %}
+            <button type="submit" class="logout-button">Cerrar sesión</button>
+          </form>
+        </div>
+      {% endif %}
+    </div>
+  {% else %}
+    <p>Acceso no permitido. Solo los doctores pueden ver esta página.</p>
+  {% endif %}
+</body>
+</html>
