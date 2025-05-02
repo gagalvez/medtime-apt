@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -148,3 +149,6 @@ EMAIL_HOST_PASSWORD = 'kjbu tnei alnk phgw' #clave de app de google
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 RECAPTCHA_SECRET_KEY = '6LfZASUrAAAAAIP_EdsSCgMJQRIPgE9eFrkgZ2OI'
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

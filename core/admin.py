@@ -45,7 +45,7 @@ class TipoCitaFilter(admin.SimpleListFilter):
 class CitaMedicaAdmin(admin.ModelAdmin):
     list_display = ['paciente', 'doctor_nombre_especialidad', 'get_especialidad_display', 'fecha', 'hora']
     search_fields = ['paciente__nombre', 'paciente__apellido', 'doctor__nombre', 'doctor__apellido', 'especialidad']
-    list_filter = ['especialidad', 'fecha', 'hora', TipoCitaFilter]  # Usamos el filtro personalizado aquí
+    list_filter = ['especialidad', 'fecha', 'hora', TipoCitaFilter]
 
     def doctor_nombre_especialidad(self, obj):
         if obj.doctor:

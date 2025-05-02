@@ -41,7 +41,8 @@
             <div class="alert alert-{{ message.tags }}">{{ message }}</div>
             {% endfor %}
           </div>
-          {% endif %} {% if form.non_field_errors %}
+          {% endif %}
+          {% if form.non_field_errors %}
           <div class="alert alert-error">
             {% for error in form.non_field_errors %}
             <p>{{ error }}</p>
@@ -56,5 +57,30 @@
         </form>
       </div>
     </div>
+
+    <script>
+      function formatearRut(rut) {
+        // Elimina todo excepto números y K/k
+        rut = rut.replace(/[^\dkK]/g, '');
+
+        let cuerpo = rut.slice(0, -1);
+        let dv = rut.slice(-1).toUpperCase();
+
+        // Agrega puntos cada 3 cifras desde el final
+        cuerpo = cuerpo.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+
+        return cuerpo + '-' + dv;
+      }
+
+      document.getElementById('rut').addEventListener('input', function (e) {
+        let cursorPos = e.target.selectionStart;
+        let rutSinFormato = e.target.value.replace(/[^\dkK]/g, '');
+        if (rutSinFormato.length < 2) {
+          e.target.value = rutSinFormato;
+          return;
+        }
+        e.target.value = formatearRut(rutSinFormato);
+      });
+    </script>
   </body>
 </html>

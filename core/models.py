@@ -10,12 +10,12 @@ class CustomUser(AbstractUser):
     )
 
     ESPECIALIDADES = [
-        ('Medico General', 'Medicina General'),
-        ('Odontologo', 'Odontología'),
-        ('Pediatra', 'Pediatría'),
-        ('Dermatologo', 'Dermatología'),
-        ('Ginecologo', 'Ginecología'),
-        ('Psicologo', 'Psicología'),
+        ('medicina_general', 'Medicina General'),
+        ('odontologia', 'Odontología'),
+        ('pediatria', 'Pediatría'),
+        ('dermatologia', 'Dermatología'),
+        ('ginecologia', 'Ginecología'),
+        ('psicologia', 'Psicología'),
     ]
 
     nombre = models.CharField(max_length=100)

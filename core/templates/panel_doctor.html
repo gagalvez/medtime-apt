@@ -15,10 +15,19 @@
       <header class="header">
         <h1>Panel de Administración para Citas Médicas - MedTime</h1>
         <div class="doctor-info">
-          <h2>Bienvenido, Dr. {{ user.nombre }} {{ user.apellido }}</h2>
-          <p><strong>Especialidad:</strong> {{ user.get_especialidad_display }}</p>
-          <p><strong>RUT:</strong> {{ user.rut }}</p>
-          <p><strong>Email:</strong> {{ user.email }}</p>
+          <div class="doctor-details">
+            {% if user.imagen %}
+              <img src="{{ user.imagen.url }}" alt="Imagen del doctor" class="doctor-image">
+            {% else %}
+              <p>No hay imagen disponible</p>
+            {% endif %}
+            <div class="doctor-description">
+              <h2>Bienvenido, Dr. {{ user.nombre }} {{ user.apellido }}</h2>
+              <p><strong>Especialidad:</strong> {{ user.get_especialidad_display }}</p>
+              <p><strong>RUT:</strong> {{ user.rut }}</p>
+              <p><strong>Email:</strong> {{ user.email }}</p>
+            </div>
+          </div>
         </div>
       </header>
 
@@ -77,3 +86,4 @@
   {% endif %}
 </body>
 </html>
+

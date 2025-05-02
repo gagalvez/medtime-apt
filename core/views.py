@@ -11,6 +11,7 @@ from django.conf import settings
 import requests
 from .models import CitaMedica, CustomUser
 from django.contrib.auth import authenticate, login
+from django.http import HttpResponseRedirect    
 
 # Create your views here.
 
@@ -88,14 +89,14 @@ def login_view(request):
 # Logica para el perfil
 @login_required(login_url='login')
 def perfil(request):
-    cita = None
     if request.user.is_authenticated:
-        try:
-            cita = CitaMedica.objects.filter(paciente=request.user).latest('fecha')
-        except CitaMedica.DoesNotExist:
-            pass
+        # Obtener todas las citas del paciente, ordenadas por fecha
+        citas = CitaMedica.objects.filter(paciente=request.user).order_by('-fecha', '-hora')
 
-    return render(request, 'perfil.html', {'cita': cita})
+        return render(request, 'perfil.html', {'citas': citas, 'user': request.user})
+
+    # Si no está autenticado, redirigir al login
+    return redirect('login')
 
 # Logica para cambiar pw
 @login_required
@@ -117,9 +118,17 @@ def cambiar_contraseña(request):
 # Logica para enviar correo con cita agendada
 def enviar_correo(cita):
     subject = "Confirmación de Cita Médica Agendada"
-    message = f"Hola {cita.paciente.nombre},\n\nTu cita médica ha sido agendada con éxito.\n\n" \
-              f"Especialidad: {cita.especialidad}\nFecha: {cita.fecha}\nHora: {cita.hora}\n\n" \
-              "Gracias por confiar en nosotros.\nMedTime"
+    
+    message = (
+        f"Hola {cita.paciente.nombre},\n\n"
+        f"Tu cita médica ha sido agendada con éxito.\n\n"
+        f"Especialidad: {cita.get_especialidad_display()}\n"
+        f"Doctor: {cita.doctor.nombre} {cita.doctor.apellido}\n"
+        f"Fecha: {cita.fecha}\n"
+        f"Hora: {cita.hora}\n\n"
+        "Recuerda llegar 15 minutos antes de tu cita para completar el registro con tranquilidad.\n"
+        "¡Gracias por confiar en MedTime! Estamos aquí para cuidarte."
+    )
     
     from_email = settings.DEFAULT_FROM_EMAIL
     recipient_list = [cita.paciente.email]
@@ -153,6 +162,7 @@ def agendar_cita(request):
 
         # Obtener el doctor seleccionado
         doctor = get_object_or_404(CustomUser, id=doctor_id)
+        
 
         # Guarda la cita en la base de datos
         cita = CitaMedica(
@@ -214,9 +224,17 @@ def panel_doctor(request):
 
 def obtener_doctores(request):
     especialidad = request.GET.get('especialidad')
-    doctores = CustomUser.objects.filter(rol='doctor', especialidad=especialidad).values('id', 'nombre')
+    doctores = CustomUser.objects.filter(rol='doctor', especialidad=especialidad).values('id', 'nombre', 'apellido')
 
-    return JsonResponse(list(doctores), safe=False)
+    doctores_con_nombre_completo = [
+        {
+            'id': doctor['id'],
+            'nombre': f"Dr. {doctor['nombre']} {doctor['apellido']}"
+        }
+        for doctor in doctores
+    ]
+
+    return JsonResponse(doctores_con_nombre_completo, safe=False)
 
 # Vista para eliminar una cita médica
 def eliminar_cita(request, cita_id):
@@ -227,4 +245,5 @@ def eliminar_cita(request, cita_id):
     except CitaMedica.DoesNotExist:
         messages.error(request, 'La cita no existe.')
     
-    return redirect('cita_estado')  # Redirige de vuelta a la vista de estado de la cita
+    # Redirige a la misma página
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))

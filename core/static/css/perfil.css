@@ -24,7 +24,6 @@ h2 {
 }
 
 main {
-
     padding: 20px;
     max-width: 900px;
     margin: 50px auto;
@@ -44,6 +43,22 @@ section p {
 
 strong {
     font-weight: bold;
+}
+
+.info-paciente {
+    background-color: #006b80;
+    color: white;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.citas .cita {
+    background-color: #f4f4f4;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .btn-actions {
@@ -121,4 +136,23 @@ strong {
 
 .logout-button:hover {
     background-color: #d32f2f;
+}
+
+form .btn-eliminar {
+    background-color: #006b80;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    border: none;
+    font-size: 1rem;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    margin-top: 10px;
+    transition: background-color 0.3s ease;
+    margin-bottom: 14px;
+}
+
+form .btn-eliminar:hover {
+    background-color: #2CCF9B;
 }

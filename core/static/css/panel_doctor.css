@@ -31,12 +31,25 @@ body {
   margin: 20px 0;
 }
 
-.doctor-info h2 {
+.doctor-details {
+  display: flex;
+  align-items: center;
+}
+
+.doctor-image {
+  width: 150px; 
+  height: 150px;
+  object-fit: cover;
+  border-radius: 50%;
+  margin-right: 20px;
+}
+
+.doctor-description h2 {
   font-size: 1.4em;
   color: #006b80;
 }
 
-.doctor-info p {
+.doctor-description p {
   font-size: 1.1em;
   margin: 5px 0;
 }
@@ -148,7 +161,7 @@ button:hover, a:hover {
     font-size: 1.5em;
   }
 
-  .doctor-info h2 {
+  .doctor-description h2 {
     font-size: 1.2em;
   }
 
@@ -173,6 +186,11 @@ button:hover, a:hover {
     padding: 8px 16px;
     font-size: 13px;
   }
+
+  .doctor-image {
+    width: 120px;
+    height: 120px;
+  }
 }
 
 @media (max-width: 480px) {
@@ -180,7 +198,7 @@ button:hover, a:hover {
     font-size: 1.2em;
   }
 
-  .doctor-info h2 {
+  .doctor-description h2 {
     font-size: 1.1em;
   }
 
@@ -204,5 +222,10 @@ button:hover, a:hover {
   button, a {
     padding: 6px 12px;
     font-size: 12px;
+  }
+
+  .doctor-image {
+    width: 100px;
+    height: 100px;
   }
 }

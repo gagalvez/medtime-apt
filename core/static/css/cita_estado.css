@@ -4,6 +4,7 @@ body {
     padding: 0;
     background-color: #f4f4f4;
     margin-bottom: 50px;
+    margin-top: 70px;
 }
 
 header {
@@ -98,3 +99,21 @@ footer {
     background-color: #2CCF9B;
 }
 
+form .btn-eliminar {
+    background-color: #006b80;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    border: none;
+    font-size: 1rem;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    margin-top: 10px;
+    transition: background-color 0.3s ease;
+    margin-bottom: 14px;
+}
+
+form .btn-eliminar:hover {
+    background-color: #2CCF9B;
+}

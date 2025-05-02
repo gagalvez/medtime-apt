@@ -1,55 +1,109 @@
 {% load static %}
 
-<form method="POST">
-  {% csrf_token %}
-  <h2>Agendar Cita Médica</h2>
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Agendar Cita Médica</title>
+    <link rel="stylesheet" href="{% static 'css/agendar_cita.css' %}" />
+  </head>
 
-  <label for="especialidad">Especialidad:</label>
-  <select name="especialidad" id="especialidad" required>
-    <option value="medicina_general">Medicina General</option>
-    <option value="odontologia">Odontología</option>
-    <option value="pediatria">Pediatría</option>
-    <option value="dermatologia">Dermatología</option>
-    <option value="ginecologia">Ginecología</option>
-    <option value="psicologia">Psicología</option>
-  </select>
+  <body>
+    {% include 'header.html' %}
+    <div class="form-container">
+      <form method="POST">
+        {% csrf_token %}
+        <h2>Agendar Cita Médica</h2>
 
-  <label for="doctor">Doctor:</label>
-  <select name="doctor" id="doctor" required>
-    <!-- Se llenará con los doctores correspondientes a la especialidad seleccionada -->
-  </select>
+        <div class="form-group">
+          <label for="especialidad">Especialidad:</label>
+          <select name="especialidad" id="especialidad" required>
+            <option value="" disabled selected>
+              Seleccione una especialidad
+            </option>
+            <option value="medicina_general">Medicina General</option>
+            <option value="odontologia">Odontología</option>
+            <option value="pediatria">Pediatría</option>
+            <option value="dermatologia">Dermatología</option>
+            <option value="ginecologia">Ginecología</option>
+            <option value="psicologia">Psicología</option>
+          </select>
+        </div>
 
-  <label for="fecha">Fecha:</label>
-  <input type="date" name="fecha" required />
+        <div class="form-group">
+          <label for="doctor">Doctor:</label>
+          <select name="doctor" id="doctor" required>
+            <option value="" disabled selected>Seleccione un doctor</option>
+          </select>
+        </div>
 
-  <label for="hora">Hora:</label>
-  <input type="time" name="hora" required />
+        <div class="form-group fecha-container">
+          <label>
+            Fecha:
+            <input
+              type="date"
+              id="fecha"
+              name="fecha"
+              required
+              onclick="this.showPicker()"
+            />
+          </label>
+        </div>
 
-  <button type="submit">Agendar</button>
-</form>
+        <div class="form-group hora-container">
+          <label for="hora">Hora:</label>
+          <select name="hora" id="hora" required>
+            <option value="" disabled selected>Seleccione una hora</option>
+          </select>
+        </div>
 
-<script>
-  document.getElementById('especialidad').addEventListener('change', function() {
-    const especialidad = this.value;
+        <script>
+          {% comment %}Generar opciones de hora en intervalos de 15 minutos {% endcomment %}
+          const horaSelect = document.getElementById("hora");
+          for (let h = 8; h <= 18; h++) {
+            // Desde las 08:00 a las 18:45
+            for (let m = 0; m < 60; m += 15) {
+              const hour = h.toString().padStart(2, "0");
+              const minute = m.toString().padStart(2, "0");
+              const option = document.createElement("option");
+              option.value = `${hour}:${minute}`;
+              option.text = `${hour}:${minute}`;
+              horaSelect.appendChild(option);
+            }
+          }
+        </script>
 
-    fetch(`/doctores/?especialidad=${especialidad}`)
-      .then(response => response.json())
-      .then(data => {
-        const doctorSelect = document.getElementById('doctor');
-        doctorSelect.innerHTML = '';  // Limpiar opciones previas
+        <button type="submit">Agendar</button>
+      </form>
+    </div>
 
-        // Agregar una opción predeterminada
-        const defaultOption = document.createElement('option');
-        defaultOption.text = 'Seleccione un doctor';
-        doctorSelect.add(defaultOption);
+    <script>
+      document
+        .getElementById("especialidad")
+        .addEventListener("change", function () {
+          const especialidad = this.value;
 
-        // Agregar las opciones de doctores disponibles
-        data.forEach(doctor => {
-          const option = document.createElement('option');
-          option.value = doctor.id;  // El ID del doctor
-          option.text = doctor.nombre;
-          doctorSelect.add(option);
+          fetch(`/doctores/?especialidad=${especialidad}`)
+            .then((response) => response.json())
+            .then((data) => {
+              const doctorSelect = document.getElementById("doctor");
+              doctorSelect.innerHTML = "";
+
+              // Agregar una opción predeterminada
+              const defaultOption = document.createElement("option");
+              defaultOption.text = "Seleccione un doctor";
+              doctorSelect.add(defaultOption);
+
+              // Agregar las opciones de doctores disponibles
+              data.forEach((doctor) => {
+                const option = document.createElement("option");
+                option.value = doctor.id; // El ID del doctor
+                option.text = doctor.nombre;
+                doctorSelect.add(option);
+              });
+            });
         });
-      });
-  });
-</script>
+    </script>
+  </body>
+</html>

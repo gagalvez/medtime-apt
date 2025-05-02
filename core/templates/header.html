@@ -1,8 +1,10 @@
 {% load static %}
 
+<link rel="stylesheet" href="{% static 'css/header.css' %}" />
+
 <header class="nav-bar">
   <div class="nav-left">
-    <a href="" class="nav-left-cont">
+    <a href="{% url 'base' %}" class="nav-left-cont">
       <img
         src="{% static 'img/icon.png' %}"
         alt="MedTime icon"
@@ -20,7 +22,7 @@
   </div>
 
   <ul class="nav-links">
-    <li><a href="">Home</a></li>
+    <li><a href="{% url 'base' %}">Inicio</a></li>
 
     {% if user.is_authenticated %}
     <li><a href="{% url 'perfil' %}">Perfil</a></li>
@@ -46,4 +48,4 @@
   }
 </script>
 
-<link rel="stylesheet" href="{% static 'css/header.css' %}" />
+

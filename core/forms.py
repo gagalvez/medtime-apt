@@ -5,7 +5,7 @@ import re
 
 class CustomUserForm(forms.ModelForm):
     password = forms.CharField(
-        widget=forms.PasswordInput, 
+        widget=forms.PasswordInput,
         min_length=5,
         required=True,
         label="Contraseña"
@@ -16,53 +16,51 @@ class CustomUserForm(forms.ModelForm):
         fields = ['rut', 'nombre', 'apellido', 'email', 'password']
 
     # Validación para el RUT
-def clean_rut(self):
-    rut = self.cleaned_data.get('rut')
+    def clean_rut(self):
+        rut = self.cleaned_data.get('rut')
 
-    if not rut:
-        raise forms.ValidationError('Debes ingresar un RUT.')
+        # Eliminar puntos y guion para el RUT
+        rut_normalizado = rut.replace('.', '').replace('-', '')
 
-    # Eliminar puntos y guion
-    rut_normalizado = rut.replace('.', '').replace('-', '').upper()
+        # Validar el formato (sin puntos ni guion)
+        pattern = r'^\d{7,8}[0-9kK]$'  # 7 u 8 dígitos + dígito verificador
+        if not re.match(pattern, rut_normalizado):
+            raise forms.ValidationError('El RUT debe tener 7 u 8 dígitos seguidos por un dígito verificador.')
 
-    # Validar formato: 7 u 8 dígitos + 1 dígito verificador (k o número)
-    pattern = r'^\d{7,8}[0-9K]$'
-    if not re.match(pattern, rut_normalizado):
-        raise forms.ValidationError('El RUT debe tener 7 u 8 dígitos seguidos de un dígito verificador.')
+        if CustomUser.objects.filter(rut=rut_normalizado).exists():
+            raise forms.ValidationError('El RUT ya está registrado.')
 
-    if CustomUser.objects.filter(rut=rut_normalizado).exists():
-        raise forms.ValidationError('El RUT ya está registrado.')
+        # Aplica formato 00.000.000-0
+        cuerpo = rut_normalizado[:-1]
+        dv = rut_normalizado[-1]
 
-    # formato dependiendo de si es 8 o 9 caracteres
-    cuerpo = rut_normalizado[:-1]
-    dv = rut_normalizado[-1]
+        # Aplica formato dependiendo de si tiene 7 u 8 dígitos en el cuerpo
+        if len(cuerpo) == 7:
+            rut_formateado = f"{cuerpo[:1]}.{cuerpo[1:4]}.{cuerpo[4:7]}-{dv.upper()}"
+        else:
+            rut_formateado = f"{cuerpo[:2]}.{cuerpo[2:5]}.{cuerpo[5:8]}-{dv.upper()}"
 
-    if len(cuerpo) == 7:
-        rut_formateado = f"{cuerpo[:1]}.{cuerpo[1:4]}.{cuerpo[4:7]}-{dv}"
-    else:
-        rut_formateado = f"{cuerpo[:2]}.{cuerpo[2:5]}.{cuerpo[5:8]}-{dv}"
+        return rut_formateado
 
-    return rut_formateado
-
-# Capitaliza la primera letra del nombre
-def clean_nombre(self):
+    # Capitaliza la primera letra del nombre
+    def clean_nombre(self):
         nombre = self.cleaned_data.get('nombre')
         return nombre.capitalize()
 
-# Capitaliza la primera letra del apellido
-def clean_apellido(self):
+    # Capitaliza la primera letra del apellido
+    def clean_apellido(self):
         apellido = self.cleaned_data.get('apellido')
         return apellido.capitalize()
 
-# Validación para la contraseña, minimo 5 caracteres
-def clean_password(self):
+    # Validación para la contraseña, mínimo 5 caracteres
+    def clean_password(self):
         password = self.cleaned_data.get('password')
         if len(password) < 5:
             raise forms.ValidationError('La contraseña debe tener al menos 5 caracteres.')
         return password
 
-# Validación para el email
-def clean_email(self):
+    # Validación para el email
+    def clean_email(self):
         email = self.cleaned_data.get('email')
         if CustomUser.objects.filter(email=email).exists():
             raise forms.ValidationError('Este correo electrónico ya está registrado.')

@@ -1,51 +1,66 @@
-{% load static %}
+{% load static %} 
 
 {% if user.is_paciente %}
-    <!-- Este contenido es visible solo para pacientes -->
-    <header>
-        <h1>Aquí podrás gestionar tus citas médicas</h1>
-        <h2>Bienvenido {{ user.nombre }} {{ user.apellido }}!</h2>
-    </header>
-    <main>
-        <section>
-            <h2>Información del Paciente</h2>
-            <p><strong>Nombre:</strong> {{ cita.paciente.nombre }}</p>
-            <p><strong>Apellido:</strong> {{ cita.paciente.apellido }}</p>
-            <p><strong>RUT:</strong> {{ cita.paciente.rut }}</p>
-            <p><strong>Email:</strong> {{ cita.paciente.email }}</p>
-        </section>
-        <section>
-            <h2>Detalles de la Cita</h2>
-            <p><strong>Fecha:</strong> {{ cita.fecha }}</p>
-            <p><strong>Hora:</strong> {{ cita.hora }}</p>
-            <p><strong>Especialidad:</strong> {{ cita.especialidad }}</p>
-            <p><strong>Doctor:</strong> {{ cita.doctor.nombre }} {{ cita.doctor.apellido }}</p>
-        </section>
-    </main>
+<header>
+  <h1>Aquí podrás gestionar tus citas médicas</h1>
+  <h2>Bienvenido {{ user.nombre }} {{ user.apellido }}!</h2>
+</header>
+<main>
+  <section class="info-paciente">
+    <h2>Información del Paciente</h2>
+    <p><strong>Nombre:</strong> {{ user.nombre }}</p>
+    <p><strong>Apellido:</strong> {{ user.apellido }}</p>
+    <p><strong>RUT:</strong> {{ user.rut }}</p>
+    <p><strong>Email:</strong> {{ user.email }}</p>
+  </section>
 
-    <div class="btn-actions">
-        <div class="btn-olvidar-cont">
-            <a href="{% url 'cambiar_contraseña' %}" class="btn-olvidar">Cambiar contraseña</a>
-        </div>
-        <a href="{% url 'base' %}" class="btn-volver">Volver</a>
-    </div>
-    
-    {% if user.is_authenticated %}
-    <div class="btn-actions">
-        <form action="{% url 'reenviar_correo' %}" method="post">
-            {% csrf_token %}
-            <button type="submit" class="reenviar-btn">Reenviar cita médica al correo</button>
-        </form>
+  {% if citas %}
+  <section class="citas">
+    <h2>Detalles de las Citas</h2>
+    {% for cita in citas %}
+    <div class="cita">
+      <p><strong>Fecha:</strong> {{ cita.fecha }}</p>
+      <p><strong>Hora:</strong> {{ cita.hora }}</p>
+      <p><strong>Especialidad:</strong> {{ cita.get_especialidad_display }}</p>
+      <p><strong>Doctor:</strong> {{ cita.doctor.nombre }} {{ cita.doctor.apellido }}</p>
+      <form method="POST" action="{% url 'eliminar_cita' cita.id %}">
+        {% csrf_token %}
+        <button type="submit" class="btn-eliminar">Cancelar cita</button>
+      </form>
 
-        <form action="{% url 'logout' %}" method="post">
-            {% csrf_token %}
-            <button type="submit" class="logout-button">Cerrar sesión</button>
-        </form>
     </div>
-    {% endif %}
+    {% endfor %}
+  </section>
+  {% else %}
+  <section class="citas">
+    <h2>Detalles de las Citas</h2>
+    <p>No tienes citas registradas aún.</p>
+  </section>
+  {% endif %}
+</main>
+
+<div class="btn-actions">
+  <div class="btn-olvidar-cont">
+    <a href="{% url 'cambiar_contraseña' %}" class="btn-olvidar">Cambiar contraseña</a>
+  </div>
+  <a href="{% url 'base' %}" class="btn-volver">Volver</a>
+</div>
+
+{% if user.is_authenticated %}
+<div class="btn-actions">
+  <form action="{% url 'reenviar_correo' %}" method="post">
+    {% csrf_token %}
+    <button type="submit" class="reenviar-btn">Reenviar cita médica al correo</button>
+  </form>
+
+  <form action="{% url 'logout' %}" method="post">
+    {% csrf_token %}
+    <button type="submit" class="logout-button">Cerrar sesión</button>
+  </form>
+</div>
+{% endif %}
 {% else %}
-    <p>Acceso no permitido. Solo los pacientes pueden ver esta página.</p>
+<p>Acceso no permitido. Solo los pacientes pueden ver esta página.</p>
 {% endif %}
 
-
-<link rel="stylesheet" href="{% static 'css/perfil.css' %}">
+<link rel="stylesheet" href="{% static 'css/perfil.css' %}" />

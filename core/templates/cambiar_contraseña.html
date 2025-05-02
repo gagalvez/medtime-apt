@@ -6,7 +6,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Cambiar Contraseña</title>
-    <link rel="stylesheet" href="{% static 'css/login.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/cambiar_contraseña.css' %}" />
   </head>
   <body>
     <div class="container">
@@ -17,6 +17,8 @@
         {{ form.as_p }}
 
         <button type="submit">Cambiar Contraseña</button>
+
+        <a href="{% url 'base' %}" class="btn-volver">Volver</a>
       </form>
 
       {% if messages %}
@@ -29,3 +31,5 @@
     </div>
   </body>
 </html>
+
+

@@ -2,42 +2,44 @@
 
 <!DOCTYPE html>
 <html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Cita Agendada</title>
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
-</head>
-<body>
+    <link rel="stylesheet" href="{% static 'css/cita_agendada.css' %}" />
+  </head>
+  <body>
     <header>
-        <h1>Cita Médica Agendada</h1>
+      <h1>Cita Médica Agendada</h1>
     </header>
     <main>
-        <section>
-            <h2>Información del Paciente</h2>
-            {% if cita.paciente %}
-                <p><strong>Nombre:</strong> {{ cita.paciente.nombre }}</p>
-                <p><strong>Apellido:</strong> {{ cita.paciente.apellido }}</p>
-                <p><strong>RUT:</strong> {{ cita.paciente.rut }}</p>
-            {% else %}
-                <p>No se encontró información del paciente.</p>
-            {% endif %}
-        </section>
+      <section>
+        <h2>Información del Paciente</h2>
+        {% if cita.paciente %}
+        <p><strong>Nombre:</strong> {{ cita.paciente.nombre }}</p>
+        <p><strong>Apellido:</strong> {{ cita.paciente.apellido }}</p>
+        <p><strong>RUT:</strong> {{ cita.paciente.rut }}</p>
+        <hr />
+        {% else %}
+        <p>No se encontró información del paciente.</p>
+        {% endif %}
+        <h2>Información de la Cita Medica</h2>
+        {% if cita.doctor %}
+        <p>
+          <strong>Doctor:</strong> {{ cita.doctor.nombre }} {{ cita.doctor.apellido }}
+        </p>
+        {% else %}
+        <p>No se encontró información del doctor.</p>
+        {% endif %}
+        <p>
+          <strong>Especialidad:</strong> {{ cita.get_especialidad_display }}
+        </p>
+        <p><strong>Fecha:</strong> {{ cita.fecha }}</p>
+        <p><strong>Hora:</strong> {{ cita.hora }}</p>
 
-        <section>
-            <h2>Detalles de la Cita</h2>
-            <p><strong>Fecha:</strong> {{ cita.fecha }}</p>
-            <p><strong>Hora:</strong> {{ cita.hora }}</p>
-            <p><strong>Especialidad:</strong> {{ cita.get_especialidad_display }}</p> <!-- Aquí se usa el método get_especialidad_display -->
-            
-            {% if cita.doctor %}
-                <p><strong>Doctor:</strong> {{ cita.doctor.nombre }} {{ cita.doctor.apellido }}</p> <!-- Aquí se muestra el doctor -->
-            {% else %}
-                <p>No se encontró información del doctor.</p>
-            {% endif %}
-        </section>
+      </section>
     </main>
 
     <a href="{% url 'base' %}" class="btn-volver">Volver</a>
-</body>
+  </body>
 </html>
